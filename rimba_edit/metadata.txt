@@ -3,32 +3,34 @@ name=Rimba Edit
 qgisMinimumVersion=3.22
 qgisMaximumVersion=4.99
 supportsQt6=True
-description=Alat bantu edit bidang dan atribut: pecah multipart, perbaiki geometri, salin/isi atribut, cari & ganti, salin koordinat, hitung luas (ha/m²), validasi kolom wajib, ekspor Excel, dan cek topologi.
-about=Kumpulan alat untuk digitasi dan pengelolaan data bidang (petak, blok, areal izin, persil) di QGIS. Semua perubahan dicatat sebagai satu langkah undo, aman untuk GeoPackage/PostGIS/SpatiaLite (kolom ID utama tidak ikut disalin), dan mendukung geometri Z/M. Dikembangkan dari plugin "Editor Bidang dan Atribut" karya Fajar SNI (GPL-3.0).
-version=0.9.2
+description=Parcel and attribute editing toolkit: explode multipart, repair invalid geometry, copy/fill attributes, find and replace, copy coordinates, area calculation (ha/m²), mandatory field validation, Excel export and topology check.
+about=A set of tools for digitizing and maintaining parcel data (forest compartments, blocks, permit areas, land parcels) in QGIS. Every tool records its changes as a single undo step, is safe for GeoPackage, PostGIS and SpatiaLite layers (primary key fields are never copied, so saving does not fail on UNIQUE constraints), and supports Z/M geometries. Tools: explode multipart features, repair invalid geometries, copy attributes to selected features, quick multi-field fill, find and replace values, copy feature coordinates (layer CRS or WGS84 DD/DMS), ellipsoidal area calculation in hectares or square metres, mandatory field validation with highlighting (keeps the original layer style), export attributes to Excel, and a topology checker for polygons (invalid, overlaps, gaps, slivers) and lines (crossings, dangles) that writes findings to review layers. The user interface is in Indonesian. Forked from "Editor Bidang dan Atribut" by Fajar SNI (GPL-3.0).
+version=0.9.3
 author=Alfian (Ian)
 email=alfianq2@gmail.com
-homepage=https://github.com/meowtret/rimba-edit
-tracker=https://github.com/meowtret/rimba-edit/issues
-repository=https://github.com/meowtret/rimba-edit
-tags=bidang,petak,parcel,digitizing,topology,attributes,geometry,area,luas,validasi,kehutanan,forestry
+homepage=https://github.com/meowtret/Rimba-edit
+tracker=https://github.com/meowtret/Rimba-edit/issues
+repository=https://github.com/meowtret/Rimba-edit
+tags=parcel,cadastre,digitizing,editing,attributes,geometry,topology,area,validation,excel,forestry
 category=Vector
 icon=icons/main.svg
 experimental=True
 deprecated=False
 changelog=
+    0.9.3 (2026-11-02)
+    - English plugin description and metadata for the QGIS plugin repository
     0.9.2 (2026-11-02)
-    - Alat Tukar Atribut, Pemecahan Bidang, dan Penomoran Akhiran Otomatis dihapus
+    - Removed the Swap Attributes, Parcel Split and Letter Suffix Numbering tools
     0.9.1 (2026-11-02)
-    - Semua ikon digambar ulang dengan gaya dan palet ikon bawaan QGIS (SVG 24 px, tanpa kotak latar)
+    - Redrew all icons in the style and palette of the default QGIS icon theme (24 px SVG)
     0.9.0 (2026-11-02)
-    - Fork dari Editor Bidang dan Atribut 0.1.1 (Fajar SNI) dengan nama baru Rimba Edit
-    - Kompatibel Python 3.9+ (sebelumnya gagal dimuat di Python < 3.12)
-    - Kompatibel QGIS 3.22 s.d. QGIS 4 (Qt5/Qt6)
-    - Kolom ID utama (fid/PK) tidak lagi ikut disalin/ditukar: tidak ada lagi galat UNIQUE/duplicate key saat menyimpan
-    - Setiap alat = satu langkah undo
-    - Dukungan geometri Z/M dan penyesuaian otomatis single/multipart
-    - Hitung Luas: satuan ha/m², opsi buat kolom baru, aman untuk CRS geografis
-    - Validasi: statistik NULL akurat, gaya asli layer tidak hilang (style manager)
-    - Ekspor Excel: aman untuk NULL/tanggal, cadangan tanpa openpyxl, huruf Arial
-    - Cek Topologi ditulis ulang: indeks spasial, deteksi celah yang benar, layer hasil untuk ditinjau, deteksi dangle
+    - Forked from Editor Bidang dan Atribut 0.1.1 (Fajar SNI) under the new name Rimba Edit
+    - Python 3.9+ compatible (the original failed to load on Python < 3.12)
+    - Compatible with QGIS 3.22 to QGIS 4 (Qt5/Qt6)
+    - Primary key fields are no longer copied, fixing UNIQUE/duplicate key errors on save
+    - Each tool is a single undo step
+    - Z/M geometry support and automatic single/multipart conversion
+    - Area calculation in ha or m², optional new field, correct for geographic CRS
+    - Validation: correct NULL statistics, original layer style preserved
+    - Excel export: safe for NULL and date values, GDAL fallback without openpyxl
+    - Topology checker rewritten: spatial index, correct gap detection, review layers, dangle detection
