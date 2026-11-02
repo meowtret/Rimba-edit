@@ -45,8 +45,12 @@ build_zip.py         pengemas ZIP
 Uji fungsional dijalankan dengan Python milik QGIS (butuh `python3-qgis`):
 
 ```
-QT_QPA_PLATFORM=offscreen python3 tests/test_rimba.py
+QT_QPA_PLATFORM=offscreen python3 tests/test_rimba.py       # uji fungsional
+QT_QPA_PLATFORM=offscreen python3 tests/check_qt6_enums.py rimba_edit   # cek enum Qt6/QGIS 4
+python3 -m bandit -r rimba_edit                               # pemindaian keamanan
 ```
+
+Jalankan ketiganya sebelum mengunggah versi baru ke plugins.qgis.org.
 
 ## Asal-usul dan lisensi
 

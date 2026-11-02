@@ -14,6 +14,7 @@ from contextlib import contextmanager
 from qgis.core import (
     Qgis,
     QgsDistanceArea,
+    QgsFeatureRequest,
     QgsField,
     QgsFields,
     QgsGeometry,
@@ -23,7 +24,7 @@ from qgis.core import (
     QgsVectorLayerUtils,
     QgsWkbTypes,
 )
-from qgis.PyQt.QtCore import QCoreApplication, Qt
+from qgis.PyQt.QtCore import QCoreApplication, QDate, QDateTime, QTime, Qt
 from qgis.PyQt.QtWidgets import QDialog, QMessageBox, QProgressDialog
 
 PLUGIN_NAME = 'Rimba Edit'
@@ -41,31 +42,33 @@ def _first(*getters):
     raise AttributeError('Tidak ada enum yang cocok untuk versi QGIS ini')
 
 
+# Nama baru (QGIS >= 3.30, satu-satunya yang ada di QGIS 4) dicoba lebih dulu.
+# Cadangan untuk QGIS 3.22-3.28 ditulis dalam bentuk ber-scope
+# (Kelas.NamaEnum.Anggota) yang juga valid di PyQt5.
 GEOM_POINT = _first(lambda: Qgis.GeometryType.Point,
-                    lambda: QgsWkbTypes.PointGeometry)
+                    lambda: QgsWkbTypes.GeometryType.PointGeometry)
 GEOM_LINE = _first(lambda: Qgis.GeometryType.Line,
-                   lambda: QgsWkbTypes.LineGeometry)
+                   lambda: QgsWkbTypes.GeometryType.LineGeometry)
 GEOM_POLYGON = _first(lambda: Qgis.GeometryType.Polygon,
-                      lambda: QgsWkbTypes.PolygonGeometry)
+                      lambda: QgsWkbTypes.GeometryType.PolygonGeometry)
 
 AREA_M2 = _first(lambda: Qgis.AreaUnit.SquareMeters,
-                 lambda: QgsUnitTypes.AreaSquareMeters)
+                 lambda: QgsUnitTypes.AreaUnit.AreaSquareMeters)
 AREA_HA = _first(lambda: Qgis.AreaUnit.Hectares,
-                 lambda: QgsUnitTypes.AreaHectares)
+                 lambda: QgsUnitTypes.AreaUnit.AreaHectares)
 
 ORIGIN_PROVIDER = _first(lambda: Qgis.FieldOrigin.Provider,
-                         lambda: QgsFields.OriginProvider)
+                         lambda: QgsFields.FieldOrigin.OriginProvider)
 ORIGIN_EDIT = _first(lambda: Qgis.FieldOrigin.Edit,
-                     lambda: QgsFields.OriginEdit)
+                     lambda: QgsFields.FieldOrigin.OriginEdit)
 
 REQUEST_NO_GEOMETRY = _first(
     lambda: Qgis.FeatureRequestFlag.NoGeometry,
-    lambda: __import__('qgis.core', fromlist=['QgsFeatureRequest'])
-    .QgsFeatureRequest.NoGeometry)
+    lambda: QgsFeatureRequest.Flag.NoGeometry)
 
-MSG_INFO = _first(lambda: Qgis.MessageLevel.Info, lambda: Qgis.Info)
-MSG_WARNING = _first(lambda: Qgis.MessageLevel.Warning, lambda: Qgis.Warning)
-MSG_SUCCESS = _first(lambda: Qgis.MessageLevel.Success, lambda: Qgis.Success)
+MSG_INFO = Qgis.MessageLevel.Info
+MSG_WARNING = Qgis.MessageLevel.Warning
+MSG_SUCCESS = Qgis.MessageLevel.Success
 
 YES = QMessageBox.StandardButton.Yes
 NO = QMessageBox.StandardButton.No
@@ -73,10 +76,8 @@ ACCEPTED = QDialog.DialogCode.Accepted
 
 
 def exec_dialog(dialog):
-    """dialog.exec() untuk Qt6, exec_() sebagai cadangan Qt5 lama."""
-    if hasattr(dialog, 'exec'):
-        return dialog.exec()
-    return dialog.exec_()  # pragma: no cover
+    """Jalankan dialog modal (exec() tersedia di PyQt5 dan PyQt6)."""
+    return dialog.exec()
 
 
 # --------------------------------------------------------------------------
@@ -253,13 +254,12 @@ def to_python(value):
         return None
     if isinstance(value, (bool, int, float, str)):
         return value
-    for attr in ('toPyDateTime', 'toPyDate', 'toPyTime'):
-        fn = getattr(value, attr, None)
-        if callable(fn):
-            try:
-                return fn()
-            except Exception:
-                pass
+    if isinstance(value, QDateTime):
+        return value.toPyDateTime()
+    if isinstance(value, QDate):
+        return value.toPyDate()
+    if isinstance(value, QTime):
+        return value.toPyTime()
     return str(value)
 
 

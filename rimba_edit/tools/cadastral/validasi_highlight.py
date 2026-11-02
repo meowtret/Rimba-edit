@@ -150,10 +150,9 @@ class ValidasiHighlight:
                  '#007800')):
             symbol = QgsSymbol.defaultSymbol(layer.geometryType())
             symbol.setColor(QColor(fill))
-            try:
-                symbol.symbolLayer(0).setStrokeColor(QColor(line))
-            except Exception:
-                pass
+            symbol_layer = symbol.symbolLayer(0)
+            if symbol_layer is not None:
+                symbol_layer.setStrokeColor(QColor(line))
             symbol.setOpacity(0.8)
             rule = QgsRuleBasedRenderer.Rule(symbol, 0, 0, expr, label)
             root.appendChild(rule)

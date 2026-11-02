@@ -10,7 +10,8 @@ satu, dan fitur yang bermasalah dipilih (select) di layer asal. Perbaikan
 otomatis hanya untuk geometri tidak valid (makeValid) dan bersifat opsional.
 """
 from qgis.core import (
-    QgsFeature, QgsGeometry, QgsLayerTreeLayer, QgsPointXY, QgsProject,
+    QgsFeature, QgsGeometry, QgsLayerTreeLayer, QgsMarkerSymbol, QgsPointXY,
+    QgsProject,
     QgsSpatialIndex, QgsSymbol, QgsVectorLayer,
 )
 from qgis.PyQt.QtGui import QColor
@@ -273,11 +274,8 @@ def build_result_layers(source, findings):
         symbol.setColor(QColor(color))
         if lyr is poly:
             symbol.setOpacity(0.6)
-        else:
-            try:
-                symbol.setSize(3.2)
-            except Exception:
-                pass
+        elif isinstance(symbol, QgsMarkerSymbol):
+            symbol.setSize(3.2)
         lyr.renderer().setSymbol(symbol)
     return [lyr for lyr in (poly, pts) if lyr.featureCount() > 0]
 

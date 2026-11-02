@@ -5,7 +5,7 @@ qgisMaximumVersion=4.99
 supportsQt6=True
 description=Parcel and attribute editing toolkit: explode multipart, repair invalid geometry, copy/fill attributes, find and replace, copy coordinates, area calculation (ha/m²), mandatory field validation, Excel export and topology check.
 about=A set of tools for digitizing and maintaining parcel data (forest compartments, blocks, permit areas, land parcels) in QGIS. Every tool records its changes as a single undo step, is safe for GeoPackage, PostGIS and SpatiaLite layers (primary key fields are never copied, so saving does not fail on UNIQUE constraints), and supports Z/M geometries. Tools: explode multipart features, repair invalid geometries, copy attributes to selected features, quick multi-field fill, find and replace values, copy feature coordinates (layer CRS or WGS84 DD/DMS), ellipsoidal area calculation in hectares or square metres, mandatory field validation with highlighting (keeps the original layer style), export attributes to Excel, and a topology checker for polygons (invalid, overlaps, gaps, slivers) and lines (crossings, dangles) that writes findings to review layers. The user interface is in Indonesian. Forked from "Editor Bidang dan Atribut" by Fajar SNI (GPL-3.0).
-version=0.9.3
+version=0.9.4
 author=Alfian (Ian)
 email=alfianbphlxii@gmail.com
 homepage=https://github.com/meowtret/Rimba-edit
@@ -17,6 +17,9 @@ icon=icons/main.svg
 experimental=True
 deprecated=False
 changelog=
+    0.9.4 (2026-11-02)
+    - Qt6/QGIS 4: all enums use their fully scoped names, exec_() replaced by exec()
+    - Removed try/except/pass blocks flagged by the security scan
     0.9.3 (2026-11-02)
     - English plugin description and metadata for the QGIS plugin repository
     0.9.2 (2026-11-02)

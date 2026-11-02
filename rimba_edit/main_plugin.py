@@ -111,10 +111,7 @@ class RimbaEditPlugin:
         for tool in self.tools:
             cleanup = getattr(tool, 'unload', None)
             if callable(cleanup):
-                try:
-                    cleanup()
-                except Exception:
-                    pass
+                cleanup()
         for action in self.actions:
             if self.toolbar:
                 self.toolbar.removeAction(action)
